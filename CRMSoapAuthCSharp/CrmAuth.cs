@@ -166,11 +166,10 @@ namespace CRMSoapAuthCSharp
         /// <param name="password">The password.</param>
         /// <param name="url">The CRM OnPremise URL ("https://org.domain.com/").</param>
         /// <returns>CrmAuthenticationHeader.</returns>
-        public CrmAuthenticationHeader GetHeaderOnPremise(string domain, string username, string password, string url)
+        public CrmAuthenticationHeader GetHeaderOnPremise(string username, string password, string url)
         {
             if (!url.EndsWith("/"))
                 url += "/";
-            username = domain + "\\" + username;
             string adfsUrl = GetAdfs(url);
             if (adfsUrl == null) 
                 return null;

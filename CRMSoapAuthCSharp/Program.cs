@@ -11,18 +11,18 @@ namespace CRMSoapAuthCSharp
             CrmAuth auth = new CrmAuth();
 
             //CRM Online
-            const string url = "https://org.crm.dynamics.com/";
-            const string username = "username@org.onmicrosoft.com";
-            const string password = "password";
-            CrmAuthenticationHeader authHeader = auth.GetHeaderOnline(username, password, url);
+            //const string url = "https://org.crm.dynamics.com/";
+            //const string username = "username@org.onmicrosoft.com";
+            //const string password = "password";
+            //CrmAuthenticationHeader authHeader = auth.GetHeaderOnline(username, password, url);
             //End CRM Online
 
             //CRM OnPremise - IFD
-            //const string url = "https://org.domain.com/";
-            //const string domain = "jltest1";
-            //const string username = "username";
-            //const string password = "password";
-            //CrmAuthenticationHeader authHeader = auth.GetHeaderOnPremise(domain, username, password, url);
+            const string url = "https://org.domain.com/";
+            //Username format could be domain\\username or username in the form of an email
+            const string username = "username";
+            const string password = "password";
+            CrmAuthenticationHeader authHeader = auth.GetHeaderOnPremise(username, password, url);
             //End CRM OnPremise - IFD
 
             if (authHeader == null) return;
