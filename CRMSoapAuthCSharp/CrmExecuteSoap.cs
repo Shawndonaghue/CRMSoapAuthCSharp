@@ -13,9 +13,12 @@ namespace CRMSoapAuthCSharp
         /// <param name="authHeader">CrmAuthenticationHeader.</param>
         /// <param name="requestBody">The SOAP request body.</param>
         /// <param name="url">The CRM URL.</param>
-        /// <returns>SOAP response as a XmlDocument.</returns>
+        /// <returns>SOAP response.</returns>
         public static XmlDocument ExecuteSoapRequest(CrmAuthenticationHeader authHeader, string requestBody, string url)
         {
+            if (!url.EndsWith("/"))
+                url += "/";
+
             StringBuilder xml = new StringBuilder();
             xml.Append("<s:Envelope xmlns:s=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:a=\"http://www.w3.org/2005/08/addressing\">");
             xml.Append(authHeader.Header);

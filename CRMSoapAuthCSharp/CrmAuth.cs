@@ -10,12 +10,12 @@ namespace CRMSoapAuthCSharp
     class CrmAuth
     {
         /// <summary>
-        /// Gets the header XML and expiration for CRM Online.
+        /// Gets a CRM Online SOAP header & expiration.
         /// </summary>
-        /// <param name="username">The username.</param>
-        /// <param name="password">The password.</param>
-        /// <param name="url">The CRM Online URL (https://org.crm.dynamics.com/).</param>
-        /// <returns>CrmAuthenticationHeader.</returns>
+        /// <param name="username">Username of a valid CRM user.</param>
+        /// <param name="password">Password of a valid CRM user.</param>
+        /// <param name="url">The Url of the CRM Online organization (https://org.crm.dynamics.com).</param>
+        /// <returns>An object containing the SOAP header and expiration date/time of the header.</returns>
         public CrmAuthenticationHeader GetHeaderOnline(string username, string password, string url)
         {
             if (!url.EndsWith("/"))
@@ -36,7 +36,7 @@ namespace CRMSoapAuthCSharp
             xml.Append("<o:Security s:mustUnderstand=\"1\" xmlns:o=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">");
             xml.Append("<u:Timestamp u:Id=\"_0\">");
             xml.Append("<u:Created>" + now.ToUniversalTime().ToString("o") + "</u:Created>");
-            xml.Append("<u:Expires>" + now.AddMinutes(5).ToUniversalTime().ToString("o") + "</u:Expires>");
+            xml.Append("<u:Expires>" + now.AddMinutes(60).ToUniversalTime().ToString("o") + "</u:Expires>");
             xml.Append("</u:Timestamp>");
             xml.Append("<o:UsernameToken u:Id=\"uuid-" + Guid.NewGuid() + "-1\">");
             xml.Append("<o:Username>" + username + "</o:Username>");
@@ -99,13 +99,13 @@ namespace CRMSoapAuthCSharp
         }
 
         /// <summary>
-        /// Creates the SOAP header for CRM Online.
+        /// Gets a CRM Online SOAP header.
         /// </summary>
-        /// <param name="url">The CRM Online URL (https://org.crm.dynamics.com/)</param>
-        /// <param name="keyIdentifer">KeyIdentifier.</param>
-        /// <param name="token1">Token1.</param>
-        /// <param name="token2">Token2.</param>
-        /// <returns>SOAP Header XML.</returns>
+        /// <param name="url">The Url of the CRM Online organization (https://org.crm.dynamics.com).</param>
+        /// <param name="keyIdentifer">The KeyIdentifier from the initial request.</param>
+        /// <param name="token1">The first token from the initial request.</param>
+        /// <param name="token2">The second token from the initial request.</param>
+        /// <returns>The XML SOAP header to be used in future requests.</returns>
         private static string CreateSoapHeaderOnline(string url, string keyIdentifer, string token1, string token2)
         {
             StringBuilder xml = new StringBuilder();
@@ -142,10 +142,10 @@ namespace CRMSoapAuthCSharp
         }
 
         /// <summary>
-        /// Gets the urn for CRM Online.
+        /// Gets the correct URN Address based on the Online region.
         /// </summary>
-        /// <param name="url">The CRM Online URL (https://org.crm.dynamics.com/)</param>
-        /// <returns>Urn string</returns>
+        /// <param name="url">The Url of the CRM Online organization (https://org.crm.dynamics.com).</param>
+        /// <returns>URN Address.</returns>
         private static string GetUrnOnline(string url)
         {
             if (url.ToUpper().Contains("CRM2.DYNAMICS.COM"))
@@ -159,13 +159,12 @@ namespace CRMSoapAuthCSharp
         }
 
         /// <summary>
-        /// Gets the header XML and expiration for CRM OnPremise.
+        /// Gets a CRM On Premise SOAP header & expiration.
         /// </summary>
-        /// <param name="domain">The domain.</param>
-        /// <param name="username">The username.</param>
-        /// <param name="password">The password.</param>
-        /// <param name="url">The CRM OnPremise URL ("https://org.domain.com/").</param>
-        /// <returns>CrmAuthenticationHeader.</returns>
+        /// <param name="username">Username of a valid CRM user.</param>
+        /// <param name="password">Password of a valid CRM user.</param>
+        /// <param name="url">The Url of the CRM On Premise (IFD) organization (https://org.domain.com).</param>
+        /// <returns>An object containing the SOAP header and expiration date/time of the header.</returns>
         public CrmAuthenticationHeader GetHeaderOnPremise(string username, string password, string url)
         {
             if (!url.EndsWith("/"))
@@ -189,7 +188,7 @@ namespace CRMSoapAuthCSharp
             xml.Append("<Security s:mustUnderstand=\"1\" xmlns:u=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd\" xmlns=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">");
             xml.Append("<u:Timestamp  u:Id=\"" + Guid.NewGuid() + "\">");
             xml.Append("<u:Created>" + now.ToUniversalTime().ToString("o") + "</u:Created>");
-            xml.Append("<u:Expires>" + now.AddMinutes(5).ToUniversalTime().ToString("o") + "</u:Expires>");
+            xml.Append("<u:Expires>" + now.AddMinutes(60).ToUniversalTime().ToString("o") + "</u:Expires>");
             xml.Append("</u:Timestamp>");
             xml.Append("<UsernameToken u:Id=\"" + Guid.NewGuid() + "\">");
             xml.Append("<Username>" + username + "</Username>");
@@ -281,18 +280,18 @@ namespace CRMSoapAuthCSharp
         }
 
         /// <summary>
-        /// Creates the SOAP header for CRM OnPremise.
+        /// Gets a CRM On Premise (IFD) SOAP header.
         /// </summary>
-        /// <param name="url">The CRM OnPremise URL ("https://org.domain.com/").</param>
-        /// <param name="keyIdentifer">KeyIdentifier.</param>
-        /// <param name="token1">Token1.</param>
-        /// <param name="token2">Token2.</param>
-        /// <param name="issuerNameX509">X509IssuerName.</param>
-        /// <param name="serialNumberX509">X509SerialNumber.</param>
-        /// <param name="signatureValue">SignatureValue.</param>
-        /// <param name="digestValue">DigestValue.</param>
-        /// <param name="created">Created.</param>
-        /// <param name="expires">Expires.</param>
+        /// <param name="url">The CRM On Premise URL ("https://org.domain.com/").</param>
+        /// <param name="keyIdentifer">The KeyIdentifier from the initial request.</param>
+        /// <param name="token1">The first token from the initial request.</param>
+        /// <param name="token2">The second token from the initial request.</param>
+        /// <param name="issuerNameX509">The certificate issuer.</param>
+        /// <param name="serialNumberX509">The certificate serial number.</param>
+        /// <param name="signatureValue">The hashsed value of the header signature.</param>
+        /// <param name="digestValue">The hashed value of the header timestamp.</param>
+        /// <param name="created">The header created date/time.</param>
+        /// <param name="expires">The header expiration date/tim.</param>
         /// <returns>SOAP Header XML.</returns>
         private static string CreateSoapHeaderOnPremise(string url, string keyIdentifer, string token1, string token2, string issuerNameX509, string serialNumberX509, string signatureValue, string digestValue, string created, string expires)
         {
@@ -361,10 +360,10 @@ namespace CRMSoapAuthCSharp
         }
 
         /// <summary>
-        /// Gets the AD FS URL for CRm OnPremise.
+        /// Gets the name of the ADFS server CRM uses for authentication.
         /// </summary>
-        /// <param name="url">The CRM OnPremise URL ("https://org.domain.com/").</param>
-        /// <returns>The AD FS URL.</returns>
+        /// <param name="url">The Url of the CRM On Premise (IFD) organization (https://org.domain.com).</param>
+        /// <returns>The AD FS server url.</returns>
         private static string GetAdfs(string url)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url + "/XrmServices/2011/Organization.svc?wsdl=wsdl0");
