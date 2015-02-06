@@ -83,15 +83,15 @@ namespace CRMSoapAuthCSharp
             string token1 = cipherElements[0].InnerText;
             string token2 = cipherElements[1].InnerText;
 
-            XmlNodeList keyIdentiferElements = x.GetElementsByTagName("wsse:KeyIdentifier");
-            string keyIdentifer = keyIdentiferElements[0].InnerText;
+            XmlNodeList keyIdentifierElements = x.GetElementsByTagName("wsse:KeyIdentifier");
+            string keyIdentifier = keyIdentifierElements[0].InnerText;
 
             XmlNodeList tokenExpiresElements = x.GetElementsByTagName("wsu:Expires");
             string tokenExpires = tokenExpiresElements[0].InnerText;
 
             CrmAuthenticationHeader authHeader = new CrmAuthenticationHeader
             {
-                Header = CreateSoapHeaderOnline(url, keyIdentifer, token1, token2),
+                Header = CreateSoapHeaderOnline(url, keyIdentifier, token1, token2),
                 Expires = DateTimeOffset.Parse(tokenExpires).UtcDateTime
             };
 
@@ -102,11 +102,11 @@ namespace CRMSoapAuthCSharp
         /// Gets a CRM Online SOAP header.
         /// </summary>
         /// <param name="url">The Url of the CRM Online organization (https://org.crm.dynamics.com).</param>
-        /// <param name="keyIdentifer">The KeyIdentifier from the initial request.</param>
+        /// <param name="keyIdentifier">The KeyIdentifier from the initial request.</param>
         /// <param name="token1">The first token from the initial request.</param>
         /// <param name="token2">The second token from the initial request.</param>
         /// <returns>The XML SOAP header to be used in future requests.</returns>
-        private static string CreateSoapHeaderOnline(string url, string keyIdentifer, string token1, string token2)
+        private static string CreateSoapHeaderOnline(string url, string keyIdentifier, string token1, string token2)
         {
             StringBuilder xml = new StringBuilder();
             xml.Append("<s:Header>");
@@ -119,7 +119,7 @@ namespace CRMSoapAuthCSharp
             xml.Append("<EncryptionMethod Algorithm=\"http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p\"/>");
             xml.Append("<ds:KeyInfo Id=\"keyinfo\">");
             xml.Append("<wsse:SecurityTokenReference xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">");
-            xml.Append("<wsse:KeyIdentifier EncodingType=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary\" ValueType=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509SubjectKeyIdentifier\">" + keyIdentifer + "</wsse:KeyIdentifier>");
+            xml.Append("<wsse:KeyIdentifier EncodingType=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary\" ValueType=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509SubjectKeyIdentifier\">" + keyIdentifier + "</wsse:KeyIdentifier>");
             xml.Append("</wsse:SecurityTokenReference>");
             xml.Append("</ds:KeyInfo>");
             xml.Append("<CipherData>");
@@ -366,7 +366,7 @@ namespace CRMSoapAuthCSharp
         /// <returns>The AD FS server url.</returns>
         private static string GetAdfs(string url)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url + "/XrmServices/2011/Organization.svc?wsdl=wsdl0");
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url + "XrmServices/2011/Organization.svc?wsdl=wsdl0");
             request.Method = "GET";
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             Stream dataStream = response.GetResponseStream();
