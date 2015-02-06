@@ -238,8 +238,8 @@ namespace CRMSoapAuthCSharp
             XmlNodeList cipherValue2 = x.GetElementsByTagName("xenc:CipherValue");
             string token2 = cipherValue2[0].InnerText;
 
-            XmlNodeList keyIdentifierElements = x.GetElementsByTagName("o:KeyIdentifier");
-            string keyIdentifier = keyIdentifierElements[0].InnerText;
+            XmlNodeList keyIdentiferElements = x.GetElementsByTagName("o:KeyIdentifier");
+            string keyIdentifer = keyIdentiferElements[0].InnerText;
 
             XmlNodeList x509IssuerNameElements = x.GetElementsByTagName("X509IssuerName");
             string x509IssuerName = x509IssuerNameElements[0].InnerText;
@@ -272,7 +272,7 @@ namespace CRMSoapAuthCSharp
                 Expires =
                     DateTime.ParseExact(tokenExpiresElements[0].InnerText, "yyyy-MM-ddTHH:mm:ss.fffK", null)
                         .ToUniversalTime(),
-                Header = CreateSoapHeaderOnPremise(url, keyIdentifier, token1, token2, x509IssuerName,
+                Header = CreateSoapHeaderOnPremise(url, keyIdentifer, token1, token2, x509IssuerName,
                     x509SerialNumber, signatureValue, digestValue, created, expires)
             };
 
@@ -283,7 +283,7 @@ namespace CRMSoapAuthCSharp
         /// Gets a CRM On Premise (IFD) SOAP header.
         /// </summary>
         /// <param name="url">The CRM On Premise URL ("https://org.domain.com/").</param>
-        /// <param name="keyIdentifier">The KeyIdentifier from the initial request.</param>
+        /// <param name="keyIdentifer">The KeyIdentifier from the initial request.</param>
         /// <param name="token1">The first token from the initial request.</param>
         /// <param name="token2">The second token from the initial request.</param>
         /// <param name="issuerNameX509">The certificate issuer.</param>
@@ -293,7 +293,7 @@ namespace CRMSoapAuthCSharp
         /// <param name="created">The header created date/time.</param>
         /// <param name="expires">The header expiration date/tim.</param>
         /// <returns>SOAP Header XML.</returns>
-        private static string CreateSoapHeaderOnPremise(string url, string keyIdentifier, string token1, string token2, string issuerNameX509, string serialNumberX509, string signatureValue, string digestValue, string created, string expires)
+        private static string CreateSoapHeaderOnPremise(string url, string keyIdentifer, string token1, string token2, string issuerNameX509, string serialNumberX509, string signatureValue, string digestValue, string created, string expires)
         {
             StringBuilder xml = new StringBuilder();
             xml.Append("<s:Header>");
@@ -349,7 +349,7 @@ namespace CRMSoapAuthCSharp
             xml.Append("<SignatureValue>" + signatureValue + "</SignatureValue>");
             xml.Append("<KeyInfo>");
             xml.Append("<o:SecurityTokenReference xmlns:o=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">");
-            xml.Append("<o:KeyIdentifier ValueType=\"http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.0#SAMLAssertionID\">" + keyIdentifier + "</o:KeyIdentifier>");
+            xml.Append("<o:KeyIdentifier ValueType=\"http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.0#SAMLAssertionID\">" + keyIdentifer + "</o:KeyIdentifier>");
             xml.Append("</o:SecurityTokenReference>");
             xml.Append("</KeyInfo>");
             xml.Append("</Signature>");

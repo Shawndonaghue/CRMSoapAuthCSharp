@@ -22,8 +22,7 @@ namespace CRMSoapAuthCSharp
             ////Username format could be domain\\username or username in the form of an email
             //const string username = "username";
             //const string password = "password";
-            //CrmAuthenticationHeader authHeader = auth.GetHeaderOnPremise(username, password, url);
-            //End CRM OnPremise - IFD
+            //CrmAuthenticationHeader 
 
             if (authHeader == null) return;
 
